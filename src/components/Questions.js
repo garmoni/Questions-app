@@ -17,7 +17,7 @@ class Questions extends React.Component {
     getData = () => {
         this.props.fetchData()
             .then((json) => {
-                const data = json.items.map((item) => {
+                json.items.map((item) => {
                    return this.setState({dataSource: [...this.state.dataSource, item]})
                 })
             })
@@ -29,27 +29,40 @@ class Questions extends React.Component {
 
         const columns = [
             {
-                //title: 'Name',
-                dataIndex: 'display_name',
+                title: 'Title',
+                dataIndex: 'title',
+                key: 'title',
+                width: 400,
+                render: title => <span>{title}</span>
+            },
+            {
+                title: 'Answer count',
+                dataIndex: 'answer_count',
+                key: 'answer_count',
+                width: 100,
+            },
+            {
+                title: 'Tags',
+                dataIndex: 'tags',
+                key: 'tags',
+                width: 250,
+                render: tags => {return tags.join(', ')}
+            },
+            {
+                title: 'Name',
+                dataIndex: 'owner',
                 key: 'display_name',
-                width: '30%',
-            },
-            {
-                //title: 'Age',
-                dataIndex: 'link',
-                key: 'link',
-                width: '30%',
-            },
-            {
-                //title: 'Address',
-                dataIndex: 'location',
-                key: 'location',
-                width: '30%',
-            },
+                width: 200,
+                render: owner => <span>{owner.display_name}</span>
+            }
         ];
         return (
             <div>
-                <Table loading={!this.state.dataSource} dataSource={this.state.dataSource} columns={columns} />
+                <Table 
+                    loading={!this.state.dataSource} 
+                    dataSource={this.state.dataSource} 
+                    columns={columns}
+                />
             </div>
         )
     }
