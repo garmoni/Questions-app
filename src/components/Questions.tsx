@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchData } from '../redux/actions'
 import { Table } from 'antd';
+import { NavLink } from 'react-router-dom';
+import Answer from './Answer';
 
-class Questions extends React.Component {
-    constructor(props) {
+class Questions extends React.Component<any, any> {
+    constructor(props:any) {
         super(props)
         this.state = {
-            dataSource: []
+            dataSource: [],
         }
       }
       
@@ -16,12 +18,12 @@ class Questions extends React.Component {
     }
     getData = () => {
         this.props.fetchData()
-            .then((json) => {
-                json.items.map((item) => {
+            .then((json:any) => {
+                json.items.map((item:any) => {
                    return this.setState({dataSource: [...this.state.dataSource, item]})
                 })
             })
-            .catch((e) => {
+            .catch((e:String) => {
                 return console.log(e)
             })
     }
@@ -33,35 +35,47 @@ class Questions extends React.Component {
                 dataIndex: 'title',
                 key: 'title',
                 width: 400,
-                render: title => <span>{title}</span>
+                render: (title:any) => <NavLink  to='/answer' 
+                ><p dangerouslySetInnerHTML={{ __html: title }} /></NavLink>
             },
+            // {
+            //     title: 'Description',
+            //     dataIndex: 'body',
+            //     key: 'body',
+            //     width: 600,
+            //     render: (body:any) => <p className='body-wrap' dangerouslySetInnerHTML={{ __html: body }} />
+            // },
             {
                 title: 'Answer count',
                 dataIndex: 'answer_count',
                 key: 'answer_count',
-                width: 100,
+                width: 150,
+                sorter: (a:any, b:any) => a.answer_count - b.answer_count,
             },
             {
                 title: 'Tags',
                 dataIndex: 'tags',
                 key: 'tags',
                 width: 250,
-                render: tags => {return tags.join(', ')}
+                render: (tags:any) => tags.join(', ')
             },
             {
                 title: 'Name',
                 dataIndex: 'owner',
                 key: 'display_name',
                 width: 200,
-                render: owner => <span>{owner.display_name}</span>
+                render: (owner:any) => owner.display_name
             }
         ];
+
         return (
             <div>
                 <Table 
                     loading={!this.state.dataSource} 
-                    dataSource={this.state.dataSource} 
+                    dataSource={this.state.dataSource}
                     columns={columns}
+                    rowKey={record => record.title}
+                    pagination={{pageSizeOptions : ['10', '20', '30'], showSizeChanger : true}}
                 />
             </div>
         )
