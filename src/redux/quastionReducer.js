@@ -4,7 +4,7 @@ const initialState = {
     questions: [],
 }
 
-export const quastionReducer = (state = initialState, action) => {
+export const questionReducer = (state = initialState, action) => {
     switch (action.type){
         case FETCH_DATA: 
         return { ...state, questions: action.payload }

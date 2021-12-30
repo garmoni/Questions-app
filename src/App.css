@@ -15,3 +15,8 @@ ul, ol {
     white-space: nowrap; 
     overflow:hidden;
 }
+.ant-spin-spinning {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
