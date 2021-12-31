@@ -1,18 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData, getAnswers, titleAnswers } from '../redux/actions';
+import { fetchData, getAnswers, titleAnswers, paginationChange } from '../redux/actions';
 //import { Route, Routes } from 'react-router-dom';
 import { Spin, Table } from 'antd';
 import Answer from './Answer'
 
 interface StateProps {
     data: any;
+    totalItems: number;
+    currentPage: number;
+    recordsPerPage: number;
 }
 
 interface DispatchProps {
     fetchData: () => void;
     getAnswers: (id: number) => void;
     titleAnswers: (title: string) => void;
+    paginationChange: (pageNumber: number, pageSize: number) => void;
 }
 
 type State = {
@@ -70,24 +74,34 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
         return (
             <div>
                 {data && !rowId ?
-                    <Table
-                        onRow={(record, rowIndex: any) => {
-                            return {
-                                onClick: record => {
-                                    this.props.getAnswers(data[rowIndex].question_id);
-                                    this.props.titleAnswers(data[rowIndex].question_id)
-                                    this.setState({rowId: true})
-                                }
-                            };
-                        }}
-                        dataSource={data}
-                        columns={columns}
-                        rowKey={record => record.title}
-                        pagination={{ pageSizeOptions: ['10', '20', '30'], showSizeChanger: true }}
-                    />
+                    <>
+                        <Table
+                            onRow={(record, rowIndex: any) => {
+                                return {
+                                    onClick: record => {
+                                        this.props.getAnswers(data[rowIndex].question_id);
+                                        this.props.titleAnswers(data[rowIndex].question_id)
+                                        this.setState({ rowId: true })
+                                    }
+                                };
+                            }}
+                            dataSource={data}
+                            columns={columns}
+                            rowKey={record => record.title}
+                            pagination={{
+                                current: 1,
+                                total: 100,
+                                pageSize: 20,
+                                onChange: (pageNumber: number, pageSize: number) => {
+                                    this.props.paginationChange(pageNumber, pageSize)
+                                },
+                            }}
+                        //pagination={{ pageSizeOptions: ['10', '20', '30'], showSizeChanger: true }}
+                        />
+                    </>
                     : rowId ?
                         <Answer />
-                    : <Spin size="large" />
+                        : <Spin size="large" />
                 }
             </div>
         )
@@ -102,7 +116,8 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = {
     fetchData,
     getAnswers,
-    titleAnswers
+    titleAnswers,
+    paginationChange
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Questions);
+export default connect(mapStateToProps, mapDispatchToProps)(Questions as any);

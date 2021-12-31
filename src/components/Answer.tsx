@@ -16,13 +16,13 @@ class Answer extends React.Component<StateProps & DispatchProps> {
 
     render() {
         const { answer, title } = this.props
-        console.log(answer)
         
         return (
             <div>
                 {answer.items && title.items ?
                 <>
                 <h3 dangerouslySetInnerHTML={{ __html: title.items[0].title }} />
+                <p dangerouslySetInnerHTML={{ __html: title.items[0].body }} />
                 <ul> 
                     {answer.items.map((item:any, key:number) => 
                         <li key={key}>
