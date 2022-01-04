@@ -1,22 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData, getAnswers, titleAnswers, paginationChange } from '../redux/actions';
-//import { Route, Routes } from 'react-router-dom';
+import { fetchData, getAnswers, titleAnswers } from '../redux/actions';
+import { Navigate } from 'react-router-dom';
 import { Spin, Table } from 'antd';
-import Answer from './Answer'
 
 interface StateProps {
     data: any;
     totalItems: number;
     currentPage: number;
-    recordsPerPage: number;
+    pageSize: number;
+    totalSize: number;
 }
 
 interface DispatchProps {
-    fetchData: () => void;
+    fetchData: (currentPage: number, pageSize: number, totalSize: number) => void;
     getAnswers: (id: number) => void;
     titleAnswers: (title: string) => void;
-    paginationChange: (pageNumber: number, pageSize: number) => void;
+   //paginationChange: (pageNumber: number, pageSize: number) => void;
 }
 
 type State = {
@@ -32,7 +32,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
     }
 
     componentDidMount() {
-        this.props.fetchData()
+        this.props.fetchData(1, 20, 100)
     }
 
     render() {
@@ -68,7 +68,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
             },
         ];
 
-        const { data } = this.props
+        const { data, currentPage, pageSize, totalSize } = this.props
         const { rowId } = this.state
         console.log(data)
         return (
@@ -89,19 +89,19 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                             columns={columns}
                             rowKey={record => record.title}
                             pagination={{
-                                current: 1,
-                                total: 100,
-                                pageSize: 20,
-                                onChange: (pageNumber: number, pageSize: number) => {
-                                    this.props.paginationChange(pageNumber, pageSize)
-                                },
+                                current: currentPage,
+                                total: totalSize,
+                                showSizeChanger: true
+                                // onChange: (pageNumber: number, pageSize: number) => {
+                                //     this.props.paginationChange(pageNumber, pageSize)
+                                // },
                             }}
                         //pagination={{ pageSizeOptions: ['10', '20', '30'], showSizeChanger: true }}
                         />
                     </>
-                    : rowId ?
-                        <Answer />
-                        : <Spin size="large" />
+                    : rowId
+                    ? <Navigate to="/answer" replace />
+                    : <Spin size="large" />
                 }
             </div>
         )
@@ -117,7 +117,7 @@ const mapDispatchToProps = {
     fetchData,
     getAnswers,
     titleAnswers,
-    paginationChange
+    //paginationChange
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Questions as any);

@@ -4,10 +4,10 @@ const initialState = {
     questions: [],
     answers: [],
     title: '',
-    pagination: {
-        rowCount: 1,
-        pageCount: 20
-    }
+    // pagination: {
+    //     rowCount: 1,
+    //     pageCount: 20
+    // }
 }
 
 export const questionReducer = (state = initialState, action) => {
@@ -18,8 +18,8 @@ export const questionReducer = (state = initialState, action) => {
             return { ...state, answers: action.payload }
         case TITLE_ANSWERS:
             return { ...state, title: action.payload }
-        case PAGINATION_TYPE:
-            return {...state, pagination: action.payload}
+        // case PAGINATION_TYPE:
+        //     return {...state, pagination: action.payload}
         default: return state
     }    
 }
