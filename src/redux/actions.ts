@@ -1,12 +1,12 @@
-import { FETCH_DATA, GET_ANSWERS, TITLE_ANSWERS, PAGINATION_TYPE } from "./types";
+import { FETCH_DATA, GET_ANSWERS, TITLE_ANSWERS } from "./types";
 
 const url = 'https://api.stackexchange.com/2.2/'
 
 export function fetchData(currentPage: number, pageSize: number, totalSize: number) {
     return async (dispatch:any) =>  {
-        const response = await fetch(`${url}questions?page=${currentPage}&total=${totalSize}&order=desc&sort=activity&site=stackoverflow&key=X*Dl33mPzca8jXX)58SHiQ((`)
+        const response = await fetch(`${url}questions?page=${currentPage}&pageSize=${totalSize}&order=desc&sort=activity&site=stackoverflow&key=X*Dl33mPzca8jXX)58SHiQ((`)
         const json = await response.json()
-        console.log(json)
+
         dispatch({type: FETCH_DATA, payload: json})
     }
 }

@@ -1,4 +1,4 @@
-import { FETCH_DATA, GET_ANSWERS, TITLE_ANSWERS, PAGINATION_TYPE } from "./types"
+import { FETCH_DATA, GET_ANSWERS, TITLE_ANSWERS } from "./types"
 
 const initialState = {
     questions: [],
