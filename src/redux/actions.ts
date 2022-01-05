@@ -15,7 +15,7 @@ export function getAnswers(id:Number) {
     return async (dispatch:any) =>  {
         const response = await fetch(`${url}questions/${id}/answers?order=desc&sort=votes&site=stackoverflow&filter=!9Z(-wzfpy`)
         const json = await response.json()
- 
+        console.log(json)
         dispatch({type: GET_ANSWERS, payload: json})
     }
 }

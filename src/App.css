@@ -42,3 +42,10 @@ img {
 h3 {
     margin-top: 20px;
 }
+.ant-tag-magenta {
+    display: inline-block;
+    margin-bottom: 8px;
+}
+td.ant-table-cell {
+    padding: 8px 16px!important;
+}

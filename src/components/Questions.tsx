@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchData, getAnswers, titleAnswers } from '../redux/actions';
 import { Navigate } from 'react-router-dom';
-import { Spin, Table, Input, Button, Space } from 'antd';
+import { Spin, Table, Input, Button, Space, Tag } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 
 interface StateProps {
@@ -144,8 +144,8 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                 title: 'Tags',
                 dataIndex: 'tags',
                 key: 'tags',
-                width: 250,
-                render: (tags: any) => tags.join(', ')
+                width: 300,
+                render: (tags: any) => tags.map((item:string, key:number) => <Tag color="magenta" key={key}>{item}</Tag>)
             },
             {
                 title: 'Name',
