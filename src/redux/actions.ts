@@ -6,7 +6,7 @@ export function fetchData(currentPage: number, pageSize: number) {
     return async (dispatch:any) =>  {
         const response = await fetch(`${url}questions?page=${currentPage}&pageSize=${pageSize}&order=desc&sort=activity&filter=!nKzQUR693x&site=stackoverflow&key=HvkZRI2Sh7NzURDMbtNXhQ((`)
         const json = await response.json()
-
+        console.log(currentPage, pageSize)
         dispatch({type: FETCH_DATA, payload: json})
     }
 }

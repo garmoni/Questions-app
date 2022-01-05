@@ -36,7 +36,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
     }
 
     componentDidMount() {
-        this.props.fetchData(1, 10)
+        this.props.fetchData(1, 20)
         this.props.getAnswers(false);
     }
 
@@ -159,7 +159,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
         const colorTags = ["magenta", "purple", "red", "volcano", "gold", "orange", "geekblue"]
 
-        const { data, currentPage, pageSize, totalSize } = this.props
+        const { data, currentPage, totalSize } = this.props
         const { rowId } = this.state
 
         return (
@@ -173,10 +173,10 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                             rowKey={record => record.question_id}
                             pagination={{
                                 current: currentPage,
-                                pageSize: pageSize,
                                 total: totalSize,
-                                onChange: (pageNumber: number, pageSize: number) => {
-                                    this.props.fetchData(pageNumber, pageSize)
+                                defaultPageSize: 20, 
+                                onChange: (pageNumber: number, defaultPageSize: number) => {
+                                    this.props.fetchData(pageNumber, defaultPageSize)
                                 },
                             }}
                         />
