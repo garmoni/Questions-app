@@ -37,7 +37,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
     componentDidMount() {
         this.props.fetchData(1, 20)
-        this.props.getAnswers(false);
+        this.props.getAnswers(0);
     }
 
     onClickRow = (record: any) => {

@@ -6,7 +6,7 @@ export function fetchData(currentPage: number, pageSize: number) {
     return async (dispatch:any) =>  {
         const response = await fetch(`${url}questions?page=${currentPage}&pageSize=${pageSize}&order=desc&sort=activity&filter=!nKzQUR693x&site=stackoverflow&key=HvkZRI2Sh7NzURDMbtNXhQ((`)
         const json = await response.json()
-        console.log(currentPage, pageSize)
+        //console.log(currentPage, pageSize)
         dispatch({type: FETCH_DATA, payload: json})
     }
 }
@@ -15,7 +15,7 @@ export function getAnswers(id:Number) {
     return async (dispatch:any) =>  {
         const response = await fetch(`${url}questions/${id}/answers?order=desc&sort=votes&site=stackoverflow&filter=!9Z(-wzfpy`)
         const json = await response.json()
-        console.log(json)
+        //console.log(json)
         dispatch({type: GET_ANSWERS, payload: json})
     }
 }
