@@ -15,7 +15,7 @@ interface StateProps {
 
 interface DispatchProps {
     fetchData: (currentPage: number, pageSize: number) => void;
-    getAnswers: (id: number) => void;
+    getAnswers: (id: number | boolean) => void;
     titleAnswers: (title: string) => void;
 }
 
@@ -37,6 +37,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
     componentDidMount() {
         this.props.fetchData(1, 10)
+        this.props.getAnswers(false);
     }
 
     onClickRow = (record: any) => {
@@ -145,7 +146,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                 dataIndex: 'tags',
                 key: 'tags',
                 width: 300,
-                render: (tags: any) => tags.map((item:string, key:number) => <Tag color="magenta" key={key}>{item}</Tag>)
+                render: (tags: any) => tags.map((item:string, key:number) => <Tag color={colorTags[key]} key={key}>{item}</Tag>)
             },
             {
                 title: 'Name',
@@ -155,6 +156,8 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                 render: (owner: any) => owner.display_name
             },
         ];
+
+        const colorTags = ["magenta", "purple", "red", "volcano", "gold", "orange", "geekblue"]
 
         const { data, currentPage, pageSize, totalSize } = this.props
         const { rowId } = this.state
