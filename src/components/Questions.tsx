@@ -14,10 +14,9 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    fetchData: (currentPage: number, pageSize: number, totalSize: number) => void;
+    fetchData: (currentPage: number, pageSize: number) => void;
     getAnswers: (id: number) => void;
     titleAnswers: (title: string) => void;
-    //paginationChange: (pageNumber: number, pageSize: number) => void;
 }
 
 type State = {
@@ -37,7 +36,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
     }
 
     componentDidMount() {
-        this.props.fetchData(1, 20, 100)
+        this.props.fetchData(1, 10)
     }
 
     onClickRow = (record: any) => {
@@ -159,7 +158,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
         const { data, currentPage, pageSize, totalSize } = this.props
         const { rowId } = this.state
-        console.log(data)
+
         return (
             <div>
                 {data && !rowId ?
@@ -171,14 +170,12 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                             rowKey={record => record.question_id}
                             pagination={{
                                 current: currentPage,
-                                pageSize: 10,
+                                pageSize: pageSize,
                                 total: totalSize,
-                                showSizeChanger: true
-                                // onChange: (pageNumber: number, pageSize: number) => {
-                                //     this.props.paginationChange(pageNumber, pageSize)
-                                // },
+                                onChange: (pageNumber: number, pageSize: number) => {
+                                    this.props.fetchData(pageNumber, pageSize)
+                                },
                             }}
-                        //pagination={{ pageSizeOptions: ['10', '20', '30'], showSizeChanger: true }}
                         />
                     </>
                     : rowId
@@ -193,13 +190,13 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 const mapStateToProps = (state: any) => {
     return {
         data: state.questions.questions.items,
+        totalSize: state.questions.questions.total,
     }
 }
 const mapDispatchToProps = {
     fetchData,
     getAnswers,
     titleAnswers,
-    //paginationChange
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Questions as any);

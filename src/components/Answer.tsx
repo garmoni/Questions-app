@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getAnswers, titleAnswers } from '../redux/actions';
-import { Spin } from 'antd';
+import { Link } from 'react-router-dom';
+import { Button, Spin } from 'antd';
 
 interface StateProps {
     answer: any;
@@ -19,6 +20,7 @@ class Answer extends React.Component<StateProps & DispatchProps> {
         
         return (
             <div>
+                <Button title='Back to questions'><Link to='/'>Back to questions</Link></Button>
                 {answer.items && title.items ?
                 <>
                 <h3 dangerouslySetInnerHTML={{ __html: title.items[0].title }} />

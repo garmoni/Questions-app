@@ -2,9 +2,9 @@ import { FETCH_DATA, GET_ANSWERS, TITLE_ANSWERS } from "./types";
 
 const url = 'https://api.stackexchange.com/2.2/'
 
-export function fetchData(currentPage: number, pageSize: number, totalSize: number) {
+export function fetchData(currentPage: number, pageSize: number) {
     return async (dispatch:any) =>  {
-        const response = await fetch(`${url}questions?page=${currentPage}&pageSize=${totalSize}&order=desc&sort=activity&site=stackoverflow&key=X*Dl33mPzca8jXX)58SHiQ((`)
+        const response = await fetch(`${url}questions?page=${currentPage}&pageSize=${pageSize}&order=desc&sort=activity&filter=!nKzQUR693x&site=stackoverflow&key=X*Dl33mPzca8jXX)58SHiQ((`)
         const json = await response.json()
 
         dispatch({type: FETCH_DATA, payload: json})
@@ -15,7 +15,7 @@ export function getAnswers(id:Number) {
     return async (dispatch:any) =>  {
         const response = await fetch(`${url}questions/${id}/answers?order=desc&sort=votes&site=stackoverflow&filter=!9Z(-wzfpy`)
         const json = await response.json()
-        console.log('id', id)
+ 
         dispatch({type: GET_ANSWERS, payload: json})
     }
 }
@@ -28,12 +28,3 @@ export function titleAnswers(title:String) {
         dispatch({type: TITLE_ANSWERS, payload: json})
     }
 }
-
-// export function paginationChange(pageNumber: number, pageSize: number) {
-//     return (dispatch:any) => {
-//         dispatch({type: PAGINATION_TYPE, pagination: {
-//             pageCount: pageNumber,
-//             rowCount: pageSize
-//         }})
-//     }
-// }
