@@ -8,6 +8,7 @@ import moment from 'moment';
 interface StateProps {
     answer: any;
     title: any;
+    isLoading: boolean;
 }
 
 interface DispatchProps {
@@ -17,13 +18,13 @@ interface DispatchProps {
 class Answer extends React.Component<StateProps & DispatchProps> {
 
     render() {
-        const { answer, title } = this.props
+        const { answer, title, isLoading } = this.props
         const { Panel } = Collapse;
 
         return (
             <div>
                 <Button title='Back to questions'><Link to='/'>Back to questions</Link></Button>
-                {answer.items && title.items ?
+                {!isLoading ?
                     <>
                         <h3 dangerouslySetInnerHTML={{ __html: title.items[0].title }} />
                         <p dangerouslySetInnerHTML={{ __html: title.items[0].body }} />
@@ -60,6 +61,7 @@ const mapStateToProps = (state: any) => {
     return {
         answer: state.questions.answers,
         title: state.questions.title,
+        isLoading: state.questions.loading,
     }
 }
 const mapDispatchToProps = {
