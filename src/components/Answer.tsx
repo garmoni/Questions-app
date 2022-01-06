@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAnswers, titleAnswers } from '../redux/actions';
+import { getAnswers, getTitleAnswers } from '../redux/actions';
 import { Link } from 'react-router-dom';
 import { Button, Spin, Collapse, Comment, Tooltip, Avatar, Alert } from 'antd';
 import moment from 'moment';
@@ -12,7 +12,7 @@ interface StateProps {
 
 interface DispatchProps {
     getAnswers: () => void;
-    titleAnswers: () => void;
+    getTitleAnswers: () => void;
 }
 class Answer extends React.Component<StateProps & DispatchProps> {
 
@@ -64,7 +64,7 @@ const mapStateToProps = (state: any) => {
 }
 const mapDispatchToProps = {
     getAnswers,
-    titleAnswers
+    getTitleAnswers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Answer as any);

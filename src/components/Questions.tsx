@@ -1,22 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData, getAnswers, titleAnswers } from '../redux/actions';
+import { fetchData, getAnswers, getTitleAnswers } from '../redux/actions';
 import { Navigate } from 'react-router-dom';
 import { Spin, Table, Input, Button, Space, Tag } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 
 interface StateProps {
     data: any;
-    totalItems: number;
-    currentPage: number;
-    pageSize: number;
     totalSize: number;
+    isLoading: boolean;
 }
 
 interface DispatchProps {
     fetchData: (currentPage: number, pageSize: number) => void;
-    getAnswers: (id: number | boolean) => void;
-    titleAnswers: (title: string) => void;
+    getAnswers: (id: number) => void;
+    getTitleAnswers: (title: string) => void;
 }
 
 type State = {
@@ -43,7 +41,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
         return {
             onClick: () => {
                 this.props.getAnswers(record.question_id);
-                this.props.titleAnswers(record.question_id)
+                this.props.getTitleAnswers(record.question_id)
                 this.setState({ rowId: true })
             },
         };
@@ -138,7 +136,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                 dataIndex: 'answer_count',
                 key: 'answer_count',
                 width: 150,
-                sorter: (a: any, b: any) => a.answer_count - b.answer_count,
+                //sorter: 
             },
             {
                 title: 'Tags',
@@ -158,20 +156,20 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
         const colorTags = ["magenta", "purple", "red", "volcano", "gold", "orange", "geekblue"]
 
-        const { data, currentPage, totalSize } = this.props
+        const { data, totalSize, isLoading } = this.props
         const { rowId } = this.state
 
         return (
             <div>
-                {data && !rowId ?
+                { data && !rowId ?
                     <>
                         <Table
                             onRow={this.onClickRow}
+                            loading={isLoading}
                             dataSource={data}
                             columns={columns as any}
                             rowKey={record => record.question_id}
                             pagination={{
-                                current: currentPage,
                                 total: totalSize,
                                 defaultPageSize: 20, 
                                 onChange: (pageNumber: number, defaultPageSize: number) => {
@@ -182,23 +180,24 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
                     </>
                     : rowId
                         ? <Navigate to="/answer" replace />
-                        : <Spin size="large" />
+                        : null
                 }
             </div>
         )
     }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: any): StateProps => {
     return {
         data: state.questions.questions.items,
         totalSize: state.questions.questions.total,
+        isLoading: state.questions.loading
     }
 }
-const mapDispatchToProps = {
+const mapDispatchToProps: DispatchProps = {
     fetchData,
     getAnswers,
-    titleAnswers,
+    getTitleAnswers,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Questions as any);
+export default connect<StateProps, DispatchProps, any, State>(mapStateToProps, mapDispatchToProps )(Questions)
