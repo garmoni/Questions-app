@@ -49,3 +49,9 @@ h3 {
 td.ant-table-cell {
     padding: 8px 16px!important;
 }
+.form-wrapper {
+    display: flex;
+}
+.ant-form-item {
+    margin-right: 20px;
+}

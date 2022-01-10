@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchData, getAnswers, getTitleAnswers } from '../redux/actions';
 import { Navigate } from 'react-router-dom';
-import { Spin, Table, Input, Button, Space, Tag } from 'antd';
+import { Table, Input, Button, Space, Tag } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
+import Filter from './Filter';
 
 interface StateProps {
   data: any;
@@ -12,9 +13,9 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  fetchData: (currentPage: number, pageSize: number) => void;
+  fetchData: () => void;
   getAnswers: (id: number) => void;
-  getTitleAnswers: (title: string) => void;
+  getTitleAnswers: (id: any) => void;
 }
 
 type State = {
@@ -34,7 +35,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
   }
 
   componentDidMount() {
-    this.props.fetchData(1, 20)
+    this.props.fetchData()
   }
 
   onClickRow = (record: any) => {
@@ -46,79 +47,6 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
       },
     };
   }
-  getColumnSearchProps = (dataIndex: any) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }
-      : { setSelectedKeys: any, selectedKeys: any, confirm: any, clearFilters: any }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          //   ref={node => {
-          //     this.searchInput = node;
-          //   }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              this.setState({
-                searchText: selectedKeys[0],
-                searchedColumn: dataIndex,
-              });
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered: any) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value: string, record: any) =>
-      record[dataIndex]
-        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-        : '',
-    // onFilterDropdownVisibleChange: (visible:any) => {
-    //   if (visible) {
-    //     setTimeout(() => this.searchInput.select(), 100);
-    //   }
-    // },
-    render: (text: string) =>
-      this.state.searchedColumn === dataIndex ? (
-        dataIndex
-      ) : (
-        text
-      ),
-  });
-
-  handleSearch = (selectedKeys: any, confirm: any, dataIndex: string) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-
-  handleReset = (clearFilters: any) => {
-    clearFilters();
-    this.setState({ searchText: '' });
-  };
 
   render() {
 
@@ -128,7 +56,6 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
         dataIndex: 'title',
         key: 'title',
         width: 400,
-        ...this.getColumnSearchProps('title'),
         render: (title: any) => <span dangerouslySetInnerHTML={{ __html: title }} />
       },
       {
@@ -136,7 +63,6 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
         dataIndex: 'answer_count',
         key: 'answer_count',
         width: 150,
-        //sorter: 
       },
       {
         title: 'Tags',
@@ -150,7 +76,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
         dataIndex: 'owner',
         key: 'display_name',
         width: 200,
-        render: (owner: any) => owner.display_name
+        render: (owner: any) => <span dangerouslySetInnerHTML={{ __html: owner.display_name }} />
       },
     ];
 
@@ -161,6 +87,7 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
 
     return (
       <div>
+        <Filter />
         {data && !rowId ?
           <>
             <Table
@@ -172,8 +99,8 @@ class Questions extends React.Component<StateProps & DispatchProps, State> {
               pagination={{
                 total: totalSize,
                 defaultPageSize: 20,
-                onChange: (pageNumber: number, defaultPageSize: number) => {
-                  this.props.fetchData(pageNumber, defaultPageSize)
+                onChange: () => {
+                  this.props.fetchData()
                 },
               }}
             />
@@ -191,7 +118,7 @@ const mapStateToProps = (state: any): StateProps => {
   return {
     data: state.questions.questions.items,
     totalSize: state.questions.questions.total,
-    isLoading: state.questions.loading
+    isLoading: state.questions.loading,
   }
 }
 const mapDispatchToProps: DispatchProps = {
